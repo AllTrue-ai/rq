@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 from rq.exceptions import InvalidJobOperation
 from rq.job import Job
 
-PUBSUB_CHANNEL_TEMPLATE = 'rq:pubsub:%s'
+PUBSUB_CHANNEL_TEMPLATE = '{rq}:pubsub:%s'
 
 
 def send_command(connection: 'Redis', worker_name: str, command: str, **kwargs):

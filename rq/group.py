@@ -14,8 +14,8 @@ from .utils import as_text
 class Group:
     """A Group is a container for tracking multiple jobs with a single identifier."""
 
-    REDIS_GROUP_NAME_PREFIX = 'rq:group:'
-    REDIS_GROUP_KEY = 'rq:groups'
+    REDIS_GROUP_NAME_PREFIX = '{rq}:group:'
+    REDIS_GROUP_KEY = '{rq}:groups'
 
     def __init__(self, connection: Redis, name: Optional[str] = None):
         self.name = name if name else str(uuid4().hex)

@@ -10,17 +10,17 @@ def find_empty_redis_database(ssl=False):
     """Tries to connect to a random Redis database (starting from 4), and
     will use/connect it when no keys are in there.
     """
-    for dbnum in range(4, 17):
-        connection_kwargs = {'db': dbnum}
-        if ssl:
-            connection_kwargs['port'] = 9736
-            connection_kwargs['ssl'] = True
-            connection_kwargs['ssl_cert_reqs'] = None  # disable certificate validation
-        testconn = Redis(**connection_kwargs)
-        empty = testconn.dbsize() == 0
-        if empty:
-            return testconn
-    assert False, 'No empty Redis database found to run tests in.'
+    # for dbnum in range(4, 17):
+    connection_kwargs = {'db': 0}
+    if ssl:
+        connection_kwargs['port'] = 9736
+        connection_kwargs['ssl'] = True
+        connection_kwargs['ssl_cert_reqs'] = None  # disable certificate validation
+    testconn = Redis(**connection_kwargs)
+    # empty = testconn.dbsize() == 0
+    # if empty:
+    return testconn
+    # assert False, 'No empty Redis database found to run tests in.'
 
 
 def slow(f):

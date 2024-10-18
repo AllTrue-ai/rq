@@ -76,14 +76,14 @@ class TestQueue(RQTestCase):
         """Emptying queues."""
         q = Queue('example', connection=self.connection)
 
-        self.connection.rpush('rq:queue:example', 'foo')
-        self.connection.rpush('rq:queue:example', 'bar')
+        self.connection.rpush('{rq}:queue:example', 'foo')
+        self.connection.rpush('{rq}:queue:example', 'bar')
         self.assertEqual(q.is_empty(), False)
 
         q.empty()
 
         self.assertEqual(q.is_empty(), True)
-        self.assertIsNone(self.connection.lpop('rq:queue:example'))
+        self.assertIsNone(self.connection.lpop('{rq}:queue:example'))
 
     def test_empty_removes_jobs(self):
         """Emptying a queue deletes the associated job objects"""
@@ -98,7 +98,7 @@ class TestQueue(RQTestCase):
         q = Queue('example', connection=self.connection)
         self.assertEqual(q.is_empty(), True)
 
-        self.connection.rpush('rq:queue:example', 'sentinel message')
+        self.connection.rpush('{rq}:queue:example', 'sentinel message')
         self.assertEqual(q.is_empty(), False)
 
     def test_queue_delete(self):
@@ -196,7 +196,7 @@ class TestQueue(RQTestCase):
         self.assertEqual(job.origin, q.name)
 
         # Inspect data inside Redis
-        q_key = 'rq:queue:default'
+        q_key = '{rq}:queue:default'
         self.assertEqual(self.connection.llen(q_key), 1)
         self.assertEqual(self.connection.lrange(q_key, 0, -1)[0].decode('ascii'), job_id)
 
@@ -594,14 +594,14 @@ class TestQueue(RQTestCase):
         """Jobs are enqueued only when their dependencies are finished, and by the caller when passing a pipeline."""
         q = Queue(connection=self.connection)
         with q.connection.pipeline() as pipe:
-            pipe.watch(b'fake_key')  # Test watch then enqueue
+            pipe.watch(b'{rq}:key')  # Test watch then enqueue
             job = q.enqueue_call(say_hello, pipeline=pipe)
             self.assertEqual(q.job_ids, [])
             self.assertEqual(job.get_status(refresh=False), JobStatus.QUEUED)
             # Not in queue before execute, since passed in pipeline
             self.assertEqual(len(q), 0)
             # Make sure modifying key doesn't cause issues, if in multi mode won't fail
-            pipe.set(b'fake_key', b'fake_value')
+            pipe.set(b'{rq}:key', b'fake_value')
             pipe.execute()
             # Only in registry after execute, since passed in pipeline
         self.assertEqual(len(q), 1)

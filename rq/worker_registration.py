@@ -11,8 +11,8 @@ from rq.utils import split_list
 
 from .utils import as_text
 
-WORKERS_BY_QUEUE_KEY = 'rq:workers:%s'
-REDIS_WORKER_KEYS = 'rq:workers'
+WORKERS_BY_QUEUE_KEY = '{rq}:workers:%s'
+REDIS_WORKER_KEYS = '{rq}:workers'
 MAX_KEYS = 1000
 
 

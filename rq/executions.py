@@ -31,7 +31,7 @@ class Execution:
 
     @property
     def key(self) -> str:
-        return f'rq:execution:{self.composite_key}'
+        return f'{{rq}}:execution:{self.composite_key}'
 
     @property
     def job(self) -> Job:
@@ -110,7 +110,7 @@ class ExecutionRegistry(BaseRegistry):
     Each job has its own execution registry.
     """
 
-    key_template = 'rq:executions:{0}'
+    key_template = '{{rq}}:executions:{0}'
 
     def __init__(self, job_id: str, connection: Redis):
         self.connection = connection

@@ -13,7 +13,7 @@ from .utils import decode_redis_hash, now
 
 
 def get_key(job_id):
-    return 'rq:results:%s' % job_id
+    return '{rq}:results:%s' % job_id
 
 
 class Result:
@@ -171,7 +171,7 @@ class Result:
 
     @classmethod
     def get_key(cls, job_id):
-        return 'rq:results:%s' % job_id
+        return '{rq}:results:%s' % job_id
 
     def save(self, ttl, pipeline=None):
         """Save result data to Redis"""

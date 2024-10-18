@@ -483,7 +483,7 @@ class TestQueue(RQTestCase):
         custom_conn = redis.Redis(
             connection_pool=redis.ConnectionPool(
                 connection_class=CustomRedisConnection,
-                db=4,
+                db=0,
                 custom_arg="foo",
             )
         )
@@ -499,7 +499,7 @@ class TestQueue(RQTestCase):
     def test_no_custom_connection_pool(self):
         """Connection pool customizing must not interfere if we're using a standard
         connection (non-pooled)"""
-        standard_conn = redis.Redis(db=5)
+        standard_conn = redis.Redis(db=0)
 
         queue = Queue(connection=standard_conn)
         scheduler = RQScheduler([queue], connection=standard_conn)

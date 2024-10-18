@@ -170,9 +170,9 @@ class TestJob(RQTestCase):
         """Fetching jobs."""
         # Prepare test
         self.connection.hset(
-            'rq:job:some_id', 'data', "(S'tests.fixtures.some_calculation'\nN(I3\nI4\nt(dp1\nS'z'\nI2\nstp2\n."
+            '{rq}:job:some_id', 'data', "(S'tests.fixtures.some_calculation'\nN(I3\nI4\nt(dp1\nS'z'\nI2\nstp2\n."
         )
-        self.connection.hset('rq:job:some_id', 'created_at', '2012-02-07T22:13:24.123456Z')
+        self.connection.hset('{rq}:job:some_id', 'created_at', '2012-02-07T22:13:24.123456Z')
 
         # Fetch returns a job
         job = Job.fetch('some_id', connection=self.connection)
@@ -1050,15 +1050,15 @@ class TestJob(RQTestCase):
 
         self.assertEqual(1, len(queue.get_jobs()))
         self.assertEqual(1, len(queue.deferred_job_registry))
-        self.connection.set('some:key', b'some:value')
+        self.connection.set('{rq}:key', b'rq:value')
 
         with self.connection.pipeline() as pipe:
-            pipe.watch('some:key')
-            self.assertEqual(self.connection.get('some:key'), b'some:value')
+            pipe.watch('{rq}:key')
+            self.assertEqual(self.connection.get('{rq}:key'), b'rq:value')
             dependency.cancel(pipeline=pipe, enqueue_dependents=True)
-            pipe.set('some:key', b'some:other:value')
+            pipe.set('{rq}:key', b'rq:other:value')
             pipe.execute()
-        self.assertEqual(self.connection.get('some:key'), b'some:other:value')
+        self.assertEqual(self.connection.get('{rq}:key'), b'rq:other:value')
         self.assertEqual(1, len(queue.get_jobs()))
         self.assertEqual(0, len(queue.deferred_job_registry))
         registry = CanceledJobRegistry(connection=self.connection, queue=queue)

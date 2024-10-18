@@ -151,7 +151,7 @@ class Job:
     """A Job is just a convenient datastructure to pass around job (meta) data."""
 
     _dependency: Optional['Job']
-    redis_job_namespace_prefix = 'rq:job:'
+    redis_job_namespace_prefix = '{rq}:job:'
 
     def __init__(self, id: Optional[str] = None, connection: Optional['Redis'] = None, serializer=None):
         # Manually check for the presence of the connection argument to preserve

@@ -66,8 +66,8 @@ class Queue:
     job_class: Type['Job'] = Job
     death_penalty_class: Type[BaseDeathPenalty] = UnixSignalDeathPenalty
     DEFAULT_TIMEOUT: int = 180  # Default timeout seconds.
-    redis_queue_namespace_prefix: str = 'rq:queue:'
-    redis_queues_keys: str = 'rq:queues'
+    redis_queue_namespace_prefix: str = '{rq}:queue:'
+    redis_queues_keys: str = '{rq}:queues'
 
     @classmethod
     def all(
@@ -227,7 +227,7 @@ class Queue:
     @property
     def registry_cleaning_key(self):
         """Redis key used to indicate this queue has been cleaned."""
-        return 'rq:clean_registries:%s' % self.name
+        return '{rq}:clean_registries:%s' % self.name
 
     @property
     def scheduler_pid(self) -> Optional[int]:

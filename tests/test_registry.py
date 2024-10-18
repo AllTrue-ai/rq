@@ -44,7 +44,7 @@ class TestRegistry(RQTestCase):
         self.assertEqual(registry.serializer, JSONSerializer)
 
     def test_key(self):
-        self.assertEqual(self.registry.key, 'rq:wip:default')
+        self.assertEqual(self.registry.key, '{rq}:wip:default')
 
     def test_custom_job_class(self):
         registry = StartedJobRegistry(job_class=CustomJob)
@@ -368,7 +368,7 @@ class TestFinishedJobRegistry(RQTestCase):
         self.registry = FinishedJobRegistry(connection=self.connection)
 
     def test_key(self):
-        self.assertEqual(self.registry.key, 'rq:finished:default')
+        self.assertEqual(self.registry.key, '{rq}:finished:default')
 
     def test_cleanup(self):
         """Finished job registry removes expired jobs."""
@@ -415,7 +415,7 @@ class TestDeferredRegistry(RQTestCase):
         self.registry = DeferredJobRegistry(connection=self.connection)
 
     def test_key(self):
-        self.assertEqual(self.registry.key, 'rq:deferred:default')
+        self.assertEqual(self.registry.key, '{rq}:deferred:default')
 
     def test_add(self):
         """Adding a job to DeferredJobsRegistry."""

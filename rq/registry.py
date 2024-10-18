@@ -33,7 +33,7 @@ class BaseRegistry:
 
     job_class = Job
     death_penalty_class = UnixSignalDeathPenalty
-    key_template = 'rq:registry:{0}'
+    key_template = '{{rq}}:registry:{0}'
     cleanup: Callable[..., Any]
 
     def __init__(
@@ -239,7 +239,7 @@ class StartedJobRegistry(BaseRegistry):
     right after completion (success or failure).
     """
 
-    key_template = 'rq:wip:{0}'
+    key_template = '{{rq}}:wip:{0}'
 
     def cleanup(self, timestamp: Optional[float] = None, exception_handlers: Optional[list] = None):
         """Remove abandoned jobs from registry and add them to FailedJobRegistry.
@@ -347,7 +347,7 @@ class FinishedJobRegistry(BaseRegistry):
     registry after they have successfully completed for monitoring purposes.
     """
 
-    key_template = 'rq:finished:{0}'
+    key_template = '{{rq}}:finished:{0}'
 
     def cleanup(self, timestamp: Optional[float] = None):
         """Remove expired jobs from registry.
@@ -365,7 +365,7 @@ class FailedJobRegistry(BaseRegistry):
     Registry of containing failed jobs.
     """
 
-    key_template = 'rq:failed:{0}'
+    key_template = '{{rq}}:failed:{0}'
 
     def cleanup(self, timestamp: Optional[float] = None):
         """Remove expired jobs from registry.
@@ -412,7 +412,7 @@ class DeferredJobRegistry(BaseRegistry):
     Registry of deferred jobs (waiting for another job to finish).
     """
 
-    key_template = 'rq:deferred:{0}'
+    key_template = '{{rq}}:deferred:{0}'
 
     def cleanup(self, timestamp=None):
         """Remove expired jobs from registry and add them to FailedJobRegistry.
@@ -458,7 +458,7 @@ class ScheduledJobRegistry(BaseRegistry):
     Registry of scheduled jobs.
     """
 
-    key_template = 'rq:scheduled:{0}'
+    key_template = '{{rq}}:scheduled:{0}'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -536,7 +536,7 @@ class ScheduledJobRegistry(BaseRegistry):
 
 
 class CanceledJobRegistry(BaseRegistry):
-    key_template = 'rq:canceled:{0}'
+    key_template = '{{rq}}:canceled:{0}'
 
     def get_expired_job_ids(self, timestamp: Optional[float] = None):
         raise NotImplementedError

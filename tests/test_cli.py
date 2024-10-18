@@ -441,7 +441,7 @@ class TestRQCli(CLITestCase):
         self.assertTrue(result.output.endswith(suffix))
 
         job_id = result.output[len(prefix) : -len(suffix)]
-        queue_key = 'rq:queue:default'
+        queue_key = '{rq}:queue:default'
         self.assertEqual(self.connection.llen(queue_key), 1)
         self.assertEqual(self.connection.lrange(queue_key, 0, -1)[0].decode('ascii'), job_id)
 
@@ -467,7 +467,7 @@ class TestRQCli(CLITestCase):
         self.assertTrue(result.output.endswith(suffix))
 
         job_id = result.output[len(prefix) : -len(suffix)]
-        queue_key = 'rq:queue:default'
+        queue_key = '{rq}:queue:default'
         self.assertEqual(self.connection.llen(queue_key), 1)
         self.assertEqual(self.connection.lrange(queue_key, 0, -1)[0].decode('ascii'), job_id)
 
@@ -501,7 +501,7 @@ class TestRQCli(CLITestCase):
         )
         self.assert_normal_execution(result)
 
-        job_id = self.connection.lrange('rq:queue:default', 0, -1)[0].decode('ascii')
+        job_id = self.connection.lrange('{rq}:queue:default', 0, -1)[0].decode('ascii')
 
         worker = Worker(queue, connection=self.connection)
         worker.work(True)
@@ -621,7 +621,7 @@ class TestRQCli(CLITestCase):
         self.assert_normal_execution(result)
 
         job = Job.fetch(
-            self.connection.lrange('rq:queue:default', 0, -1)[0].decode('ascii'), connection=self.connection
+            self.connection.lrange('{rq}:queue:default', 0, -1)[0].decode('ascii'), connection=self.connection
         )
 
         self.assertEqual(job.retries_left, 3)
